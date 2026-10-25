@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="TrustVault - Secure Document Management System">
+
+    <title>{% block title %}TrustVault{% endblock %}</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Optional page-specific CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+
+            <a href="{{ url_for('dashboard') if session.get('user_id') else url_for('login') }}"
+               class="logo">
+                <span aria-hidden="true">🔐</span>
+                <span>TrustVault</span>
+            </a>
+
+            <!-- Mobile menu button -->
+            <button class="nav-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-label="Open navigation menu">
+                ☰ Menu
+            </button>
+
+            <!-- Navigation Links -->
+            <nav class="nav-links" aria-label="Main navigation">
+
+                {% if session.get('user_id') %}
+
+                    <a href="{{ url_for('dashboard') }}">
+                        Dashboard
+                    </a>
+
+                    <a href="{{ url_for('my_documents') }}">
+                        My Documents
+                    </a>
+
+                    <a href="{{ url_for('upload_document') }}">
+                        Upload
+                    </a>
+
+                    <a href="{{ url_for('search_documents') }}">
+                        Search
+                    </a>
+
+                    <a href="{{ url_for('categories') }}">
+                        Categories
+                    </a>
+
+                    {% if session.get('role') == 'admin' %}
+                        <a href="{{ url_for('admin_users') }}">
+                            Manage Users
+                        </a>
+
+                        <a href="{{ url_for('activity_logs') }}">
+                            Activity Logs
+                        </a>
+                    {% endif %}
+
+                    <a href="{{ url_for('my_profile') }}">
+                        Profile
+                    </a>
+
+                    <a href="{{ url_for('change_password') }}">
+                        Change Password
+                    </a>
+
+                    <a href="{{ url_for('logout') }}"
+                       data-confirm="Are you sure you want to log out?">
+                        Logout
+                    </a>
+
+                {% else %}
+
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}">Register</a>
+
+                {% endif %}
+
+            </nav>
+        </div>
+    </header>
+
+    <!-- Flash Messages -->
+    <div class="container flash-messages" aria-live="polite">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+        {% endwith %}
+
+    </div>
+
+    <!-- Main Page Content -->
+    <main class="container">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            &copy; <span data-current-year>2026</span>
+            TrustVault. Secure Document Management System.
+        </p>
+        <p>Your documents. Your control. Your security.</p>
+    </footer>
+
+    <!-- Main JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"
+            defer></script>
+
+    <!-- Optional page-specific JavaScript -->
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

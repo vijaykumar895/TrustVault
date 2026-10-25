@@ -1,0 +1,27 @@
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Local configuration and secrets
+.env
+
+# SQLite database - keep local data private
+trustvault.db
+trustvault.db-shm
+trustvault.db-wal
+
+# Uploaded documents and profile pictures
+uploads/*
+!uploads/.gitkeep
+
+static/profile_images/*
+!static/profile_images/.gitkeep
+
+# Editor settings
+.vscode/

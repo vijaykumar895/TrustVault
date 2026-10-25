@@ -1,0 +1,98 @@
+
+{% extends "base.html" %}
+
+{% block title %}Share Document | TrustVault{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Share Document</h1>
+        <p>Manage who can access your document.</p>
+    </div>
+    <a href="{{ url_for('my_documents') }}" class="btn btn-secondary">
+        Back to Documents
+    </a>
+</div>
+
+<div class="section">
+    <h2>{{ document['title'] }}</h2>
+    <p><strong>File:</strong> {{ document['filename'] }}</p>
+    <p><strong>Category:</strong> {{ document['category'] or 'General' }}</p>
+</div>
+
+<div class="section">
+    <h2>Share with a User</h2>
+    <p>Enter the email address of a user who has already registered.</p>
+
+    <form method="POST"
+          action="{{ url_for('share_document', document_id=document['id']) }}">
+
+        <div class="form-group">
+            <label for="email">User Email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter registered user's email"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="permission">Permission</label>
+            <select id="permission" name="permission" required>
+                <option value="view">View Only</option>
+                <option value="edit">Edit Details</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Share Document
+        </button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Users with Access</h2>
+
+    {% if shared_users %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Permission</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in shared_users %}
+                <tr>
+                    <td>{{ user['name'] }}</td>
+                    <td>{{ user['email'] }}</td>
+                    <td>{{ user['permission']|capitalize }}</td>
+                    <td>
+                        <form method="POST"
+                              action="{{ url_for('revoke_share',
+                                  document_id=document['id'],
+                                  shared_user_id=user['id']) }}"
+                              onsubmit="return confirm('Revoke this user’s access?');">
+
+                            <button type="submit" class="btn btn-danger">
+                                Revoke Access
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>No users have access to this document yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

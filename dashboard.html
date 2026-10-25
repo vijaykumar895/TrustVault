@@ -1,0 +1,61 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard - TrustVault{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Welcome to TrustVault</h1>
+        <p>Your secure document management dashboard.</p>
+    </div>
+    <a href="{{ url_for('upload_document') }}" class="btn btn-primary">
+        + Upload Document
+    </a>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>My Documents</h3>
+        <p class="stat-number">{{ document_count|default(0) }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Shared With Me</h3>
+        <p class="stat-number">{{ shared_count|default(0) }}</p>
+    </div>
+
+    {% if session.get('role') == 'admin' %}
+    <div class="stat-card">
+        <h3>Total Users</h3>
+        <p class="stat-number">{{ user_count|default(0) }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="content-card">
+    <h2>Quick Actions</h2>
+
+    <div class="quick-actions">
+        <a href="{{ url_for('my_documents') }}" class="action-link">
+            <h3>My Documents</h3>
+            <p>View and manage your documents.</p>
+        </a>
+
+        <a href="{{ url_for('upload_document') }}" class="action-link">
+            <h3>Upload Document</h3>
+            <p>Store a new document securely.</p>
+        </a>
+
+        <a href="{{ url_for('search_documents') }}" class="action-link">
+            <h3>Search Documents</h3>
+            <p>Find documents using keywords.</p>
+        </a>
+
+        <a href="{{ url_for('categories') }}" class="action-link">
+            <h3>Categories</h3>
+            <p>Browse documents by category.</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

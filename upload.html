@@ -1,0 +1,71 @@
+
+{% extends "base.html" %}
+
+{% block title %}Upload Document - TrustVault{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Upload Document</h1>
+        <p>Add a document to your secure vault.</p>
+    </div>
+</div>
+
+<div class="content-card form-card">
+    <form method="POST"
+          action="{{ url_for('upload_document') }}"
+          enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label for="title">Document Title</label>
+            <input type="text"
+                   id="title"
+                   name="title"
+                   placeholder="Enter document title"
+                   maxlength="150"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                <option value="General">General</option>
+                <option value="Academic">Academic</option>
+                <option value="Personal">Personal</option>
+                <option value="Financial">Financial</option>
+                <option value="Work">Work</option>
+                <option value="Legal">Legal</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description"
+                      name="description"
+                      rows="4"
+                      placeholder="Enter a short description (optional)"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="document">Choose Document</label>
+            <input type="file"
+                   id="document"
+                   name="document"
+                   accept=".pdf,.doc,.docx,.txt"
+                   required>
+            <small>Allowed formats: PDF, DOC, DOCX and TXT.</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                Upload Document
+            </button>
+
+            <a href="{{ url_for('my_documents') }}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

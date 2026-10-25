@@ -1,0 +1,124 @@
+
+{% extends "base.html" %}
+
+{% block title %}Activity Logs | TrustVault{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Activity Logs</h1>
+        <p>Monitor user activities and document actions in TrustVault.</p>
+    </div>
+
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+        Back to Dashboard
+    </a>
+</div>
+
+<!-- Activity Summary -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <h3>Total Activities</h3>
+        <div class="stat-number">{{ logs|length }}</div>
+        <p>Activities displayed on this page</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Recent Activity</h3>
+        <div class="stat-number">
+            {% if logs %}
+                {{ logs[0]['action'] }}
+            {% else %}
+                --
+            {% endif %}
+        </div>
+        <p>Most recent recorded action</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Access Level</h3>
+        <div class="stat-number">Admin</div>
+        <p>Activity monitoring access</p>
+    </div>
+
+</div>
+
+<!-- Activity Logs Table -->
+<div class="section">
+
+    <div class="section-header">
+        <h2>All Activities</h2>
+    </div>
+
+    {% if logs %}
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                    <th>Date &amp; Time</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+
+                    <td>
+                        {% if log['user_name'] %}
+                            {{ log['user_name'] }}
+                        {% else %}
+                            <span class="text-muted">Unknown user</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <span class="badge badge-info">
+                            {{ log['action'] }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ log['details'] or 'No additional details' }}
+                    </td>
+
+                    <td>
+                        {{ log['created_at'] or 'Not available' }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+        <div class="document-icon" style="margin: 0 auto 15px;">
+            &#128221;
+        </div>
+
+        <h3>No Activity Records</h3>
+
+        <p>
+            No activity logs are available yet.
+            Activities will appear here when recorded by the application.
+        </p>
+
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+            Go to Dashboard
+        </a>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

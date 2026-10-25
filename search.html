@@ -1,0 +1,93 @@
+
+{% extends "base.html" %}
+
+{% block title %}Search Documents - TrustVault{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Search Documents</h1>
+        <p>Find documents by title, filename, category or owner.</p>
+    </div>
+</div>
+
+<div class="content-card">
+    <form method="GET" action="{{ url_for('search_documents') }}">
+        <div class="form-group">
+            <label for="q">Search Keyword</label>
+            <input type="search"
+                   id="q"
+                   name="q"
+                   value="{{ query|default('') }}"
+                   placeholder="Enter document title or keyword">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="date_from">From Date</label>
+                <input type="date"
+                       id="date_from"
+                       name="date_from"
+                       value="{{ date_from|default('') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="date_to">To Date</label>
+                <input type="date"
+                       id="date_to"
+                       name="date_to"
+                       value="{{ date_to|default('') }}">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="{{ url_for('search_documents') }}" class="btn btn-secondary">
+            Clear
+        </a>
+    </form>
+</div>
+
+<div class="content-card">
+    <h2>Search Results</h2>
+
+    {% if documents %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Filename</th>
+                    <th>Category</th>
+                    <th>Owner</th>
+                    <th>Uploaded Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for doc in documents %}
+                <tr>
+                    <td>{{ doc['title'] }}</td>
+                    <td>{{ doc['filename'] }}</td>
+                    <td>{{ doc['category'] or 'General' }}</td>
+                    <td>{{ doc['owner_name'] or 'N/A' }}</td>
+                    <td>{{ doc['uploaded_at'] or 'N/A' }}</td>
+                    <td>
+                        <a href="{{ url_for('download_document', document_id=doc['id']) }}"
+                           class="btn btn-secondary">
+                            Download
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <h3>No matching documents</h3>
+        <p>Try another keyword or change the date filters.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
